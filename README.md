@@ -61,3 +61,33 @@ to accelerate prototyping and development.
 
 This is a hackathon prototype built for educational and demonstration purposes. 
 It is not a substitute for professional medical advice, diagnosis, or treatment.
+
+## 📱 Prototype Screenshots
+
+<img width="1080" height="1958" alt="WhatsApp Image 2026-06-20 at 5 06 12 PM" src="https://github.com/user-attachments/assets/041bd134-11f7-401d-9251-2a9a28c67399" />
+
+<img width="1080" height="1961" alt="WhatsApp Image 2026-06-20 at 5 06 13 PM" src="https://github.com/user-attachments/assets/11685485-3604-4534-9f85-7cf86b3f621e" />
+
+<img width="1080" height="1968" alt="WhatsApp Image 2026-06-20 at 5 06 14 PM" src="https://github.com/user-attachments/assets/5b4fb22e-d2f3-49c3-b9bb-77ef1dde3b3d" />
+
+<img width="1080" height="1972" alt="WhatsApp Image 2026-06-20 at 5 06 16 PM" src="https://github.com/user-attachments/assets/742e3e7d-aff9-4346-bde9-0b8fc2b25160" />
+
+<img width="1080" height="3173" alt="WhatsApp Image 2026-06-20 at 5 06 16 PM (1)" src="https://github.com/user-attachments/assets/c258e906-4807-4095-bd47-8f393077232e" />
+
+<img width="1080" height="3190" alt="WhatsApp Image 2026-06-20 at 5 06 18 PM" src="https://github.com/user-attachments/assets/59784ce0-77ef-44a7-a7ea-b4ae76c4fd31" />
+
+<img width="1080" height="3003" alt="WhatsApp Image 2026-06-20 at 5 06 18 PM (1)" src="https://github.com/user-attachments/assets/52bac006-3e84-49ba-ab66-380365e16b1f" />
+
+<img width="1080" height="2993" alt="WhatsApp Image 2026-06-20 at 5 06 19 PM" src="https://github.com/user-attachments/assets/9fcafff1-223b-4dba-8048-8643262e044a" />
+
+<img width="1080" height="3175" alt="WhatsApp Image 2026-06-20 at 5 06 19 PM (1)" src="https://github.com/user-attachments/assets/ac90ab14-8688-4c1c-b0df-765cfee5176a" />
+
+
+
+
+
+
+
+
+
+
