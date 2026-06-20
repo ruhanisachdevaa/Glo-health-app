@@ -1,0 +1,966 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: Aura Health API specification
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: cycle
+    description: Menstrual cycle tracking
+  - name: symptoms
+    description: Symptom logging
+  - name: moods
+    description: Mood tracking
+  - name: marketplace
+    description: Eco-safe product marketplace
+  - name: orders
+    description: Order management
+  - name: lifestyle
+    description: Workouts and nutrition
+  - name: zenzone
+    description: Zen zone game scores
+  - name: affirmations
+    description: Daily affirmations and jokes
+  - name: chat
+    description: Chatbot messages
+  - name: questionnaire
+    description: Health assessment questionnaire
+  - name: partner
+    description: Partner sync
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /cycle/entries:
+    get:
+      operationId: getCycleEntries
+      tags: [cycle]
+      summary: Get all cycle log entries
+      responses:
+        "200":
+          description: List of cycle entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CycleEntry"
+    post:
+      operationId: createCycleEntry
+      tags: [cycle]
+      summary: Log a cycle entry (period start, ovulation, etc.)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CycleEntryInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CycleEntry"
+
+  /cycle/entries/{id}:
+    patch:
+      operationId: updateCycleEntry
+      tags: [cycle]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      summary: Update a cycle entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CycleEntryUpdate"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CycleEntry"
+    delete:
+      operationId: deleteCycleEntry
+      tags: [cycle]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      summary: Delete a cycle entry
+      responses:
+        "204":
+          description: Deleted
+
+  /cycle/summary:
+    get:
+      operationId: getCycleSummary
+      tags: [cycle]
+      summary: Get current cycle phase, predicted next period, and cycle stats
+      responses:
+        "200":
+          description: Cycle summary
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CycleSummary"
+
+  /symptoms:
+    get:
+      operationId: getSymptoms
+      tags: [symptoms]
+      summary: Get logged symptoms
+      responses:
+        "200":
+          description: List of symptoms
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Symptom"
+    post:
+      operationId: logSymptom
+      tags: [symptoms]
+      summary: Log a symptom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SymptomInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Symptom"
+
+  /moods:
+    get:
+      operationId: getMoods
+      tags: [moods]
+      summary: Get mood logs
+      responses:
+        "200":
+          description: List of moods
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Mood"
+    post:
+      operationId: logMood
+      tags: [moods]
+      summary: Log a mood entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MoodInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Mood"
+
+  /marketplace/products:
+    get:
+      operationId: getProducts
+      tags: [marketplace]
+      summary: Get all eco-safe products
+      responses:
+        "200":
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Product"
+
+  /marketplace/products/{id}:
+    get:
+      operationId: getProduct
+      tags: [marketplace]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      summary: Get a single product
+      responses:
+        "200":
+          description: Product
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Product"
+
+  /marketplace/cart:
+    get:
+      operationId: getCart
+      tags: [marketplace]
+      summary: Get cart items
+      responses:
+        "200":
+          description: Cart
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CartItem"
+    post:
+      operationId: addToCart
+      tags: [marketplace]
+      summary: Add item to cart
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CartItemInput"
+      responses:
+        "201":
+          description: Added
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CartItem"
+
+  /marketplace/cart/{id}:
+    delete:
+      operationId: removeFromCart
+      tags: [marketplace]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      summary: Remove item from cart
+      responses:
+        "204":
+          description: Removed
+
+  /lifestyle/workouts:
+    get:
+      operationId: getWorkouts
+      tags: [lifestyle]
+      summary: Get cycle-adapted workout suggestions
+      responses:
+        "200":
+          description: List of workouts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Workout"
+
+  /lifestyle/nutrition:
+    get:
+      operationId: getNutritionTips
+      tags: [lifestyle]
+      summary: Get cycle-phase nutrition tips
+      responses:
+        "200":
+          description: Nutrition tips
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NutritionTip"
+
+  /lifestyle/mental-health:
+    get:
+      operationId: getMentalHealthResources
+      tags: [lifestyle]
+      summary: Get mental health resources (PMDD, PMS, anxiety)
+      responses:
+        "200":
+          description: Resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MentalHealthResource"
+
+  /zenzone/scores:
+    get:
+      operationId: getZenScores
+      tags: [zenzone]
+      summary: Get user's Zen Zone game scores
+      responses:
+        "200":
+          description: Scores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ZenScore"
+    post:
+      operationId: saveZenScore
+      tags: [zenzone]
+      summary: Save a Zen Zone game score
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ZenScoreInput"
+      responses:
+        "201":
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ZenScore"
+
+  /affirmations/daily:
+    get:
+      operationId: getDailyAffirmation
+      tags: [affirmations]
+      summary: Get today's personalised affirmation, fact, or joke based on cycle phase
+      responses:
+        "200":
+          description: Daily affirmation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyAffirmation"
+
+  /chat/messages:
+    get:
+      operationId: getChatMessages
+      tags: [chat]
+      summary: Get chat history
+      responses:
+        "200":
+          description: Messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChatMessage"
+    post:
+      operationId: sendChatMessage
+      tags: [chat]
+      summary: Send a message to the Aura myth-buster chatbot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatMessageInput"
+      responses:
+        "201":
+          description: Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatMessage"
+
+  /questionnaire/responses:
+    get:
+      operationId: getQuestionnaireResponses
+      tags: [questionnaire]
+      summary: Get saved questionnaire responses
+      responses:
+        "200":
+          description: Responses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuestionnaireResponse"
+    post:
+      operationId: saveQuestionnaireResponse
+      tags: [questionnaire]
+      summary: Save a questionnaire swipe response
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionnaireResponseInput"
+      responses:
+        "201":
+          description: Saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionnaireResponse"
+
+  /partner/sync:
+    get:
+      operationId: getPartnerSync
+      tags: [partner]
+      summary: Get partner sync settings and shared data
+      responses:
+        "200":
+          description: Partner sync info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartnerSync"
+    post:
+      operationId: updatePartnerSync
+      tags: [partner]
+      summary: Update partner sync preferences
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PartnerSyncInput"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PartnerSync"
+
+  /health/weight:
+    get:
+      operationId: getWeightEntries
+      tags: [cycle]
+      summary: Get weight log entries
+      responses:
+        "200":
+          description: Weight entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WeightEntry"
+    post:
+      operationId: logWeight
+      tags: [cycle]
+      summary: Log a weight entry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WeightEntryInput"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WeightEntry"
+
+  /health/correlations:
+    get:
+      operationId: getCorrelationInsights
+      tags: [symptoms]
+      summary: Get rule-based health pattern correlation insights
+      responses:
+        "200":
+          description: Insights
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CorrelationInsight"
+
+  /dashboard/stats:
+    get:
+      operationId: getDashboardStats
+      tags: [cycle]
+      summary: Get dashboard summary stats (streak, average cycle length, symptoms count, mood summary)
+      responses:
+        "200":
+          description: Dashboard stats
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DashboardStats"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    CycleEntry:
+      type: object
+      required: [id, date, type]
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+        type:
+          type: string
+          enum: [period_start, period_end, ovulation, fertile_window, spotting]
+        flow:
+          type: ["string", "null"]
+          enum: [light, medium, heavy, null]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    CycleEntryInput:
+      type: object
+      required: [date, type]
+      properties:
+        date:
+          type: string
+          format: date
+        type:
+          type: string
+          enum: [period_start, period_end, ovulation, fertile_window, spotting]
+        flow:
+          type: ["string", "null"]
+          enum: [light, medium, heavy, null]
+        notes:
+          type: ["string", "null"]
+
+    CycleEntryUpdate:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        type:
+          type: string
+          enum: [period_start, period_end, ovulation, fertile_window, spotting]
+        flow:
+          type: ["string", "null"]
+          enum: [light, medium, heavy, null]
+        notes:
+          type: ["string", "null"]
+
+    CycleSummary:
+      type: object
+      required: [currentPhase, cycleDay, avgCycleLength, nextPeriodDate, daysUntilNextPeriod]
+      properties:
+        currentPhase:
+          type: string
+          enum: [menstrual, follicular, ovulation, luteal]
+        cycleDay:
+          type: integer
+        avgCycleLength:
+          type: integer
+        nextPeriodDate:
+          type: string
+          format: date
+        daysUntilNextPeriod:
+          type: integer
+        fertilityWindow:
+          type: ["string", "null"]
+        phaseDescription:
+          type: string
+
+    Symptom:
+      type: object
+      required: [id, date, name, severity]
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+        name:
+          type: string
+        severity:
+          type: integer
+        category:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    SymptomInput:
+      type: object
+      required: [date, name, severity]
+      properties:
+        date:
+          type: string
+          format: date
+        name:
+          type: string
+        severity:
+          type: integer
+        category:
+          type: ["string", "null"]
+
+    Mood:
+      type: object
+      required: [id, date, mood, energy]
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+        mood:
+          type: string
+          enum: [happy, calm, anxious, sad, irritable, energised, tired, bloated]
+        energy:
+          type: integer
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    MoodInput:
+      type: object
+      required: [date, mood, energy]
+      properties:
+        date:
+          type: string
+          format: date
+        mood:
+          type: string
+          enum: [happy, calm, anxious, sad, irritable, energised, tired, bloated]
+        energy:
+          type: integer
+        notes:
+          type: ["string", "null"]
+
+    Product:
+      type: object
+      required: [id, name, description, price, category, imageUrl, ecoRating, inStock]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        category:
+          type: string
+          enum: [pads, tampons, cups, heat_patches, chocolates, supplements]
+        imageUrl:
+          type: string
+        ecoRating:
+          type: integer
+        inStock:
+          type: boolean
+        badge:
+          type: ["string", "null"]
+
+    CartItem:
+      type: object
+      required: [id, productId, quantity, product]
+      properties:
+        id:
+          type: integer
+        productId:
+          type: integer
+        quantity:
+          type: integer
+        product:
+          $ref: "#/components/schemas/Product"
+
+    CartItemInput:
+      type: object
+      required: [productId, quantity]
+      properties:
+        productId:
+          type: integer
+        quantity:
+          type: integer
+
+    Workout:
+      type: object
+      required: [id, name, description, phase, duration, intensity, type]
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        phase:
+          type: string
+          enum: [menstrual, follicular, ovulation, luteal, all]
+        duration:
+          type: integer
+        intensity:
+          type: string
+          enum: [low, medium, high]
+        type:
+          type: string
+
+    NutritionTip:
+      type: object
+      required: [id, title, description, phase, foods]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        phase:
+          type: string
+          enum: [menstrual, follicular, ovulation, luteal, all]
+        foods:
+          type: array
+          items:
+            type: string
+
+    MentalHealthResource:
+      type: object
+      required: [id, title, description, category, readTime]
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: [pmdd, pms, anxiety, sleep, general]
+        readTime:
+          type: integer
+        tips:
+          type: array
+          items:
+            type: string
+
+    ZenScore:
+      type: object
+      required: [id, score, level, timeSeconds, createdAt]
+      properties:
+        id:
+          type: integer
+        score:
+          type: integer
+        level:
+          type: integer
+        timeSeconds:
+          type: integer
+        pointsEarned:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+
+    ZenScoreInput:
+      type: object
+      required: [score, level, timeSeconds]
+      properties:
+        score:
+          type: integer
+        level:
+          type: integer
+        timeSeconds:
+          type: integer
+
+    DailyAffirmation:
+      type: object
+      required: [id, text, type, phase]
+      properties:
+        id:
+          type: integer
+        text:
+          type: string
+        type:
+          type: string
+          enum: [affirmation, fact, joke]
+        phase:
+          type: string
+        emoji:
+          type: string
+
+    ChatMessage:
+      type: object
+      required: [id, role, content, createdAt]
+      properties:
+        id:
+          type: integer
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+        language:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    ChatMessageInput:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: string
+        language:
+          type: ["string", "null"]
+
+    QuestionnaireResponse:
+      type: object
+      required: [id, questionId, answer, createdAt]
+      properties:
+        id:
+          type: integer
+        questionId:
+          type: string
+        answer:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    QuestionnaireResponseInput:
+      type: object
+      required: [questionId, answer]
+      properties:
+        questionId:
+          type: string
+        answer:
+          type: string
+
+    PartnerSync:
+      type: object
+      required: [id, enabled, sharePhase, shareSymptoms, shareMood, partnerEmail]
+      properties:
+        id:
+          type: integer
+        enabled:
+          type: boolean
+        sharePhase:
+          type: boolean
+        shareSymptoms:
+          type: boolean
+        shareMood:
+          type: boolean
+        partnerEmail:
+          type: ["string", "null"]
+        lastSynced:
+          type: ["string", "null"]
+          format: date-time
+
+    PartnerSyncInput:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        sharePhase:
+          type: boolean
+        shareSymptoms:
+          type: boolean
+        shareMood:
+          type: boolean
+        partnerEmail:
+          type: ["string", "null"]
+
+    DashboardStats:
+      type: object
+      required: [loggingStreak, avgCycleLength, symptomsThisMonth, dominantMood, totalPoints, cycleCount]
+      properties:
+        loggingStreak:
+          type: integer
+        avgCycleLength:
+          type: integer
+        symptomsThisMonth:
+          type: integer
+        dominantMood:
+          type: string
+        totalPoints:
+          type: integer
+        cycleCount:
+          type: integer
+
+    WeightEntry:
+      type: object
+      required: [id, date, weightKg, createdAt]
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date
+        weightKg:
+          type: number
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    WeightEntryInput:
+      type: object
+      required: [date, weightKg]
+      properties:
+        date:
+          type: string
+          format: date
+        weightKg:
+          type: number
+        notes:
+          type: ["string", "null"]
+
+    CorrelationInsight:
+      type: object
+      required: [id, title, description, confidence, category]
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        confidence:
+          type: string
+          enum: [low, medium, high]
+        category:
+          type: string
+          enum: [mood, energy, sleep, weight, pain, general]
