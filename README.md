@@ -54,7 +54,7 @@ or use mock/sample data.*
 
 ## 🤖 AI-Assisted Development
 
-This project was built using AI tools — Claude, Codex, Gemini, and Perplexity — 
+This project was built using AI tools — Claude, Codex, Gemini, replit and Perplexity — 
 to accelerate prototyping and development.
 
 ## ⚠️ Disclaimer
